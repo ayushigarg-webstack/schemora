@@ -1,0 +1,5 @@
+# Pyrefly configuration for AI Diagram Generator & Live Code Explainer
+search-path = [
+    "ml-engine",
+    "."
+]

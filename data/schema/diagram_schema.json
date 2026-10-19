@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DiagramGraphDataset",
+  "description": "Schema for Diagram Dataset samples containing natural language descriptions, diagram type classifications, and structured Intermediate Representation (IR) graphs.",
+  "type": "object",
+  "required": ["id", "text", "diagram_type", "nodes", "edges", "metadata"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{3,5}_[0-9]{4,6}$",
+      "description": "Unique stable identifier for the dataset sample, e.g., ARCH_0001 or FLOW_0042."
+    },
+    "text": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Natural language description describing the system, workflow, concept, database, or interaction."
+    },
+    "diagram_type": {
+      "type": "string",
+      "enum": [
+        "flowchart",
+        "architecture",
+        "concept_map",
+        "er_diagram",
+        "sequence_diagram",
+        "network_topology",
+        "dependency_graph"
+      ],
+      "description": "Target diagram family."
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique node identifier within the graph."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable label displayed on the diagram node."
+          },
+          "type": {
+            "type": "string",
+            "description": "Semantic node type specific to the diagram family."
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Optional domain-specific attributes (e.g. technology, cardinality, role)."
+          },
+          "source_location": {
+            "type": ["object", "null"],
+            "properties": {
+              "line_start": { "type": "integer" },
+              "line_end": { "type": "integer" },
+              "col_start": { "type": "integer" },
+              "col_end": { "type": "integer" }
+            },
+            "description": "Optional mapping to source code line ranges for code-generated diagrams."
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "target", "label", "edge_type", "directed"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Unique edge identifier within the graph."
+          },
+          "source": {
+            "type": "string",
+            "description": "Source node ID."
+          },
+          "target": {
+            "type": "string",
+            "description": "Target node ID."
+          },
+          "label": {
+            "type": "string",
+            "description": "Relationship label (e.g. Yes, No, calls, depends on, 1:N)."
+          },
+          "edge_type": {
+            "type": "string",
+            "description": "Semantic edge type specific to the diagram family."
+          },
+          "directed": {
+            "type": "boolean",
+            "description": "Whether the edge has directional semantics."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional edge metadata such as sequence order or protocol."
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["domain", "template_id", "complexity", "provenance"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "description": "Application or subject domain (e.g., e_commerce, operating_systems)."
+        },
+        "template_id": {
+          "type": "string",
+          "description": "Template group identifier used for zero-leakage split grouping."
+        },
+        "complexity": {
+          "type": "string",
+          "enum": ["simple", "medium", "complex"],
+          "description": "Structural complexity level of the diagram."
+        },
+        "provenance": {
+          "type": "string",
+          "description": "Data origin label, e.g. synthetic_controlled_template."
+        }
+      }
+    }
+  }
+}

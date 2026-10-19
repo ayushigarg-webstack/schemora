@@ -1,0 +1,21 @@
+[tool.pyrefly]
+search-path = [
+    "ml-engine",
+    "backend",
+    "."
+]
+
+[tool.pyright]
+extraPaths = [
+    "ml-engine",
+    "backend"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "ml-engine",
+    "backend"
+]
+testpaths = [
+    "tests"
+]
